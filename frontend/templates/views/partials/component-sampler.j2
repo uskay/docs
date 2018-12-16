@@ -1,0 +1,47 @@
+{% do doc.styles.addCssFile('css/components/organisms/component-sampler.css', 100) %}
+</section>
+<section class="ad-o-component-sampler">
+  <div class="ad-o-component-sampler-viewer">
+    <ul class="ad-o-component-sampler-tabs">
+      <li class="ad-o-component-sampler-tab ad-o-component-sampler-tab-active">Sample 1</li>
+      <li class="ad-o-component-sampler-tab">Sample 2</li>
+      <li class="ad-o-component-sampler-tab">Sample 3: With a long title</li>
+      <li class="ad-o-component-sampler-tab">Sample 4: With a long title</li>
+      <li class="ad-o-component-sampler-tab">Sample 5</li>
+    </ul>
+
+    <ul class="ad-o-component-sampler-samples">
+      <li class="ad-o-component-sampler-view">
+        <div class="ad-o-component-sampler-code">
+          {# Remove later, just for illustration purposes #}
+          <div class="ad-m-code-snippet"><pre><span></span><span class="p">&lt;</span><span class="nt">header</span><span class="p">&gt;</span>
+            Title of the document
+          <span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
+
+          <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            First snippet in the document.
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">amp-access</span><span class="o">=</span><span class="s">&quot;NOT subscriber&quot;</span> <span class="na">amp-access-hide</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">on</span><span class="o">=</span><span class="s">&quot;tap:amp-access.login&quot;</span><span class="p">&gt;</span>Become a subscriber now!<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">amp-access</span><span class="o">=</span><span class="s">&quot;subscriber&quot;</span><span class="p">&gt;</span>
+            Full content.
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          </pre></div>
+        </div>
+
+        <div class="ad-o-component-sampler-preview">
+          <div class="ad-o-component-sampler-dummy-iframe">
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <ul class="ad-o-component-sampler-descriptions">
+    <li class="ad-o-component-sampler-description">The amp-accordion component allows you to display collapsible and expandable content sections. Each of the amp-accordion component's immediate children is considered a section in the accordion. Each of these nodes must be a section tag.</li>
+  </ul>
+</section>
+<section class="main">

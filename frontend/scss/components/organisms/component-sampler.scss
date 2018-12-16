@@ -1,0 +1,134 @@
+@import '../../extends';
+@import '../../functions';
+@import '../../mixins';
+@import '../../variables';
+
+@import '../atoms/_headline.scss';
+@import '../atoms/_text.scss';
+@import '../atoms/_image.scss';
+@import '../atoms/_icon.scss';
+@import '../atoms/_divider.scss';
+@import '../molecules/_link.scss';
+
+
+section.#{organism('component-sampler')} {
+  @media screen and (min-width: 768px){
+    grid-column-start: 1;
+    grid-column-end: 25;
+  }
+
+  @media screen and (min-width: 1024px){
+    grid-column-start: 6;
+    grid-column-end: 25;
+  }
+}
+
+.#{organism('component-sampler')} {
+  position: relative;
+  width: 100%;
+
+  &-viewer {
+    box-shadow: inset 0 0 0 1px color('athens-gray'), 0 2px 25px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &-tabs {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: scroll;
+
+    &:after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      pointer-events: none;
+      top: 0;
+      right: 0;
+      height: 52px;
+      width: 10%;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), color('white'));
+    }
+  }
+
+    &-tab {
+      @include txt-font-accent;
+      @include txt-2;
+      color: color('oslo-gray');
+      padding: 15px;
+      flex: 1 0 auto;
+      background: linear-gradient(40deg, color('wild-sand'), color('white') 66%);
+
+      &-active {
+        color: color('white');
+        /* Not exactly river-bed as it needs to match the gradient step */
+        background: #3d4650;
+      }
+
+      /* The last child should hover over the scroll hint */
+      &:last-child {
+        position: relative;
+        z-index: 2;
+      }
+    }
+
+    &-samples {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+      &-view {
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(45deg, color('river-bed'), color('ebony-clay'));
+
+        @media screen and (min-width: 768px){
+          flex-direction: row;
+          align-items: stretch;
+        }
+      }
+
+        &-code {
+          @include txt-2;
+
+          @media screen and (min-width: 768px){
+            width: 50%;
+          }
+
+          .ad-m-code-snippet {
+            margin: 0;
+          }
+        }
+
+        &-preview {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 120px;
+          padding: 15px;
+
+          @media screen and (min-width: 768px){
+            width: 50%;
+          }
+        }
+
+          &-dummy-iframe {
+            position: absolute;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+            background: color('white');
+          }
+
+    &-descriptions {
+      list-style: none;
+      margin: 0;
+      padding: 15px;
+      border: 1px solid color('athens-gray');
+    }
+
+      &-description {
+        @include txt;
+        @include txt-2;
+      }
+}
