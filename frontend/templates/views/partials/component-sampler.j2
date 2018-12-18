@@ -1,13 +1,27 @@
 {% do doc.styles.addCssFile('css/components/organisms/component-sampler.css', 100) %}
+{# Close <section class=main> as component sampler has different grid #}
 </section>
+
+<amp-state id="componentSampler">
+  <script type="application/json">
+    {
+        "activeIndex": 0
+    }
+  </script>
+</amp-state>
+
 <section class="ad-o-component-sampler">
   <div class="ad-o-component-sampler-viewer">
     <ul class="ad-o-component-sampler-tabs">
-      <li class="ad-o-component-sampler-tab ad-o-component-sampler-tab-active">Sample 1</li>
-      <li class="ad-o-component-sampler-tab">Sample 2</li>
-      <li class="ad-o-component-sampler-tab">Sample 3: With a long title</li>
-      <li class="ad-o-component-sampler-tab">Sample 4: With a long title</li>
-      <li class="ad-o-component-sampler-tab">Sample 5</li>
+      <li class="ad-o-component-sampler-tab ad-o-component-sampler-tab-active" on="tap:AMP.setState({componentSampler: {activeIndex: 0}})">Sample 1</li>
+      <li class="ad-o-component-sampler-tab"
+      on="tap:AMP.setState({componentSampler: {activeIndex: 1}})">Sample 2</li>
+      <li class="ad-o-component-sampler-tab"
+      on="tap:AMP.setState({componentSampler: {activeIndex: 2}})">Sample 3: With a long title</li>
+      <li class="ad-o-component-sampler-tab"
+      on="tap:AMP.setState({componentSampler: {activeIndex: 3}})">Sample 4: With a long title</li>
+      <li class="ad-o-component-sampler-tab"
+      on="tap:AMP.setState({componentSampler: {activeIndex: 4}})">Sample 5</li>
     </ul>
 
     <ul class="ad-o-component-sampler-samples">
