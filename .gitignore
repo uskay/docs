@@ -24,6 +24,8 @@ pages/layouts
 pages/views
 pages/content/amp-dev/documentation/examples/*/**
 pages/content/amp-dev/documentation/components/*/**
+# Keep one of the component reference pages as a demo
+!pages/content/amp-dev/documentation/components/a/amp-amp.md
 
 # Ignore files created during build process
 platform/pages
