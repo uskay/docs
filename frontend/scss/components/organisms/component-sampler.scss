@@ -53,22 +53,27 @@ section.#{organism('component-sampler')} {
 
     &-tab {
       @include txt-font-accent;
-      @include txt-2;
+      @include txt-3;
       color: color('oslo-gray');
       padding: 15px;
       flex: 1 0 auto;
+      cursor: pointer;
       background: linear-gradient(40deg, color('wild-sand'), color('white') 66%);
-
-      &-active {
-        color: color('white');
-        /* Not exactly river-bed as it needs to match the gradient step */
-        background: #3d4650;
-      }
 
       /* The last child should hover over the scroll hint */
       &:last-child {
         position: relative;
         z-index: 2;
+      }
+
+      &:hover {
+        color: color('blue-ribbon');
+      }
+
+      &-active {
+        color: color('white');
+        /* Not exactly river-bed as it needs to match the gradient step */
+        background: #3d4650;
       }
     }
 
