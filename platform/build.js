@@ -19,11 +19,13 @@
 'use strict';
 
 const signale = require('signale');
+const mri = require('mri');
 
 const config = require('./lib/config');
 const Pipeline = require('./lib/pipeline');
 const Platform = require('./lib/platform');
 
+let args = mri(process.argv.slice(2));
 let pipeline = new Pipeline();
 
 pipeline.clean();
@@ -39,8 +41,16 @@ pipeline.clean();
 
   await pipeline.buildFrontend();
 
-  // Before pages can be built all needed documents need to be imported
-  // await pipeline.importReference();
+  // Before pages can be built all needed documents need to be imported:
+  // - The reference docs for the various components
+  // - Some documents that get maintained inside ampproject/amphtml
+  if (args['import'] === true) {
+    let referenceImport = pipeline.importReference();
+    let specImport = pipeline.importSpec();
+
+    await referenceImport;
+    await specImport;
+  }
 
   // Create sample sources which get used while generating the pages
   await pipeline.buildSamples();
@@ -53,6 +63,11 @@ pipeline.clean();
   // and tested to ensure it is working
   if (config.environment !== 'development') {
     await pipeline.optimizeBuild();
+
+    // Only create filtered pages after optimizing build as the filtered ones
+    // do not need to be optimized individually (again)
+    await pipeline.createFilteredPages();
+
     await pipeline.testBuild();
   }
 })().then(() => {

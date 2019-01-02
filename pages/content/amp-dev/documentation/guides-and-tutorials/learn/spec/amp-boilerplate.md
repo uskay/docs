@@ -1,5 +1,5 @@
 ---
-$title: "AMP Boilerplate Code"
+$title: AMP Boilerplate Code
 $order: 3
 ---
 
@@ -19,7 +19,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-
+# AMP Boilerplate Code ('head > style[amp-boilerplate]' and 'noscript > style[amp-boilerplate]')
 
 AMP HTML documents must contain the following boilerplate in their `head` tag.
 Validation is currently done with regular expressions, so it's important to keep

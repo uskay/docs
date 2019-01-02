@@ -18,6 +18,8 @@
 
 const { Signale } = require('signale');
 const signale = require('signale');
+const fs = require('fs');
+const path = require('path');
 const del = require('del');
 const gulp = require('gulp');
 const sass = require('gulp-sass');
@@ -28,8 +30,10 @@ const minifyHtml = require('html-minifier').minify;
 
 const config = require('./config');
 const Grow = require('./pipeline/grow');
-const ReferenceImporter = require('./pipeline/referenceImporter');
+const ComponentReferenceImporter = require('./pipeline/componentReferenceImporter');
+const SpecImporter = require('./pipeline/specImporter');
 const SamplesBuilder = require('./pipeline/samplesBuilder');
+const { FilteredPage, isFilterableRoute, FORMATS } = require('./pipeline/filteredPage');
 
 const TRANSPILE_SCSS_SRC = '../frontend/scss/**/[^_]*.scss';
 const TRANSPILE_SCSS_WATCH_SRC = '../frontend/scss/**/*.scss';
@@ -171,11 +175,24 @@ class Pipeline {
     return this._collect('icons', ICONS_SRC, ICONS_DEST);
   }
 
+  /**
+   * Imports the component reference (amp-accordion, amp-carousel, ...)
+   * to the documentation/components collection
+   * @return {Promise}
+   */
   async importReference() {
-    // TODO: Define condition for importing reference - for example if it
-    // has been already imported and isn't outdated don't do it
+    let importer = new ComponentReferenceImporter();
+    await importer.initialize();
 
-    let importer = new ReferenceImporter();
+    return importer.import();
+  }
+
+  /**
+   * Imports spec docs defeind in platform/imports/spec.json
+   * @return {Promise}
+   */
+  async importSpec() {
+    let importer = new SpecImporter();
     await importer.initialize();
 
     return importer.import();
@@ -233,7 +250,7 @@ class Pipeline {
   }
 
   _minifyPages() {
-    const log = new Signale({'interactive': true, 'scope': 'Minify pages'});
+    const log = new Signale({'interactive': false, 'scope': 'Minify pages'});
     log.await('Minifying page\'s ...');
 
     return new Promise((resolve, reject) => {
@@ -254,14 +271,18 @@ class Pipeline {
                      html = html.replace(/<section .*><\/section>/, '');
                      html = html.replace('<p></p>', '');
 
-                     html = minifyHtml(html, {
-                       'minifyCSS': minifyCss,
-                       'minifyJS': true,
-                       'collapseWhitespace': true,
-                       'removeEmptyElements': false,
-                       'removeRedundantAttributes': true,
-                       'ignoreCustomFragments': [/<use.*<\/use>/]
-                     });
+                     try {
+                       html = minifyHtml(html, {
+                         'minifyCSS': minifyCss,
+                         'minifyJS': true,
+                         'collapseWhitespace': true,
+                         'removeEmptyElements': false,
+                         'removeRedundantAttributes': true,
+                         'ignoreCustomFragments': [/<use.*<\/use>/]
+                       });
+                     } catch(e) {
+                       log.error(`Could not minify ${page.relative}. Invalid markup.`);
+                     }
 
                      page.contents = Buffer.from(html);
 
@@ -277,6 +298,82 @@ class Pipeline {
 
       stream.on('end', () => {
         log.success(`Minified page's HTML.`);
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Creates a variant of each page for each format if it isn't maintained
+   * manually
+   * @return {Promise}
+   */
+  createFilteredPages() {
+    const log = new Signale({'interactive': false, 'scope': 'Filter pages'});
+    log.await('Filtering pages by formats ...');
+
+    return new Promise((resolve, reject) => {
+      let stream = gulp.src(`${PAGES_DEST}/**/*.html`, {'base': './'})
+                   .pipe(through.obj(function (page, encoding, callback) {
+                     // Check if the page should even be filtered
+                     if (!isFilterableRoute(page.relative)) {
+                       log.info(`Skipping ${page.relative} as it is not filterable.`);
+                       callback();
+                       return;
+                     }
+
+                     // Already pull the contents form the buffer
+                     let html = page.contents.toString();
+
+                     // And check if it is a manually filtered page because
+                     // then the other formats will be created from the unfiltered one
+                     let manualFilter = page.relative.match(/\.(websites|ads|stories|emails)\.html/);
+                     manualFilter = manualFilter ? manualFilter[1] : null;
+                     if (manualFilter && FORMATS.indexOf(manualFilter) !== -1) {
+                       log.warn(`${page.relative} is already a manual variant for ${manualFilter}.`);
+
+                       let filteredPage = new FilteredPage(manualFilter, html);
+                       page.contents = Buffer.from(filteredPage.content);
+
+                       this.push(page);
+                       callback();
+                       return;
+                     }
+
+                     // If it is the original, unfiltered document create
+                     // the not already existant filtered documents
+                     log.await(`Creating variant for page ${page.relative} ...`);
+                     for (let format of FORMATS) {
+                        let variantPath = page.relative.replace(path.extname(page.relative), `.${format}.html`);
+
+                        // Check if there is a manually maintained format variant
+                        if (fs.existsSync(path.join(__dirname, '/../', variantPath))) {
+                          log.warn(`Page has a manual variant for format ${format}`);
+                          continue;
+                        } else {
+                          let filteredPage = new FilteredPage(format, html);
+
+                          let variantPage = page.clone();
+                          variantPage.contents = Buffer.from(filteredPage.content);
+                          variantPage.extname = `.${format}.html`;
+                          this.push(variantPage);
+
+                          log.success(`Created variant for format ${format}`);
+                        }
+                     }
+
+                     this.push(page);
+                     callback();
+                   }))
+                   .pipe(gulp.dest('./'));
+
+      stream.on('error', (error) => {
+        log.fatal(`Something went wrong while filtering pages by format.`);
+        reject(error);
+      });
+
+      stream.on('end', () => {
+        log.success(`Created filtered pages.`);
         resolve();
       });
     });

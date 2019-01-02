@@ -15,22 +15,22 @@
 
     &-list {
       @include sidebar-nav-list;
-      
+
       &.level-1 {
         @include sidebar-nav-list-level-1;
       }
-      
+
       .nav-list {
         @include sidebar-nav-list-sublevels;
       }
     }
 
     &-item {
-      @include sidebar-nav-item
-      
+      @include sidebar-nav-item;
+
       &.level-1 {
         @include sidebar-nav-item-level-1;
-        
+
         .nav-link {
           @include sidebar-nav-link-level-1;
         }
@@ -44,32 +44,32 @@
           @include sidebar-nav-icon-level-1;
         }
       }
-      
+
       &.level-2 {
         .nav-link {
           @include sidebar-nav-link-level-2;
         }
-        
+
         .nav-trigger,
         .nav-icon {
           @include sidebar-nav-trigger-level-2;
         }
-        
+
         .nav-icon .#{atom('ico')} {
           @include sidebar-nav-icon-level-2;
         }
       }
-      
+
       &.level-3 {
         .nav-link {
           @include sidebar-nav-link-level-3;
         }
       }
-      
+
       &.active > .nav-link {
         @include sidebar-nav-link-active;
       }
-      
+
       &:hover > .nav-link {
         @include sidebar-nav-link-hover;
       }
@@ -87,11 +87,11 @@
     &-trigger {
       @include sidebar-nav-trigger-state;
     }
-    
+
     &-icon .#{atom('ico')} {
       @include sidebar-nav-icon;
     }
-    
+
     span.nav-link + .nav-trigger {
       width: calc(100% + 15px);
     }

@@ -1,8 +1,9 @@
 ---
-$title: "AMPHTML ad specification"
+$title: AMPHTML ad specification
 $order: 3
-toc: true
 ---
+
+
 [TOC]
 
 <!---
@@ -22,7 +23,7 @@ limitations under the License.
 -->
 
 
-
+# AMPHTML Ad Creative Format
 
 _If you'd like to propose changes to the standard, please comment on the [Intent
 to Implement](https://github.com/ampproject/amphtml/issues/4264)_.
@@ -180,7 +181,6 @@ the [general AMP boilerplate](https://github.com/ampproject/amphtml/blob/master/
 ##### Selectors
 
 The `transition` and `animation` properties are only allowed on selectors that:
-
 - Contain only `transition`, `animation`, `transform`, `visibility`, or
   `opacity` properties.
 
@@ -310,7 +310,7 @@ is demonstrated desire for it.
 
 The following are _allowed_ tags in an AMPHTML ads creative.  Tags not explicitly
 allowed are prohibited.  This list is a subset of the general [AMP tag
-addendum whitelist](https://github.com/ampproject/amphtml/blob/master/extensions/amp-a4a/../../spec/amp-tag-addendum.md). Like that list, it is
+addendum whitelist](../../spec/amp-tag-addendum.md). Like that list, it is
 ordered consistent with HTML5 spec in section 4 [The Elements of HTML](http://www.w3.org/TR/html5/single-page.html#html-elements).
 
 Most of the omissions are either for performance or because the tags are not
@@ -322,7 +322,6 @@ HTML5 compatible.
 
 #### 4.1 The root element
 4.1.1 `<html>`
-
   - Must use types `<html ⚡4ads>` or `<html amp4ads>`
 
 #### 4.2 Document metadata
@@ -331,7 +330,6 @@ HTML5 compatible.
 4.2.2 `<title>`
 
 4.2.4 `<link>`
-
   - `<link rel=...>` tags are disallowed, except for `<link rel=stylesheet>`.
   - __Note:__ Unlike in general AMP, `<link rel="canonical">` tags are
     prohibited.
@@ -401,7 +399,6 @@ HTML5 compatible.
 4.6.1 `<ins>`
 4.6.2 `<del>`
 #### 4.7 Embedded Content
-
 - Embedded content is supported only via AMP tags, such as `<amp-img>` or
 `<amp-video>`.
 
@@ -453,22 +450,17 @@ SVG tags are not in the HTML5 namespace. They are listed below without section i
 #### 4.10 Forms
 4.10.8 `<button>`
 #### 4.11 Scripting
-
 - Like a general AMP document, the creative's `<head>` tag must contain a
   `<script async src="https://cdn.ampproject.org/amp4ads-v0.js"></script>` tag.
-
 - Unlike general AMP, `<noscript>` is prohibited.
   - _Rationale:_ Since AMPHTML ads requires Javascript to be enabled to function
     at all, `<noscript>` blocks serve no purpose in AMPHTML ads and
     only cost network bandwidth.
-
 - Unlike general AMP, `<script type="application/ld+json">` is
   prohibited.
-
   - _Rationale:_ JSON LD is used for structured data markup on host
     pages, but ad creatives are not standalone documents and don't
     contain structured data.  JSON LD blocks in them would just cost
     network bandwidth.
-
 - All other scripting rules and exclusions are carried over from general
   AMP.
