@@ -1,5 +1,5 @@
 ---
-$title: amp-demo
+$title: amp-amp
 ---
 
 [TOC]
